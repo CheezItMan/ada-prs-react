@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Button from 'react-toolbox/lib/button/Button';
 import Main from './components/Main';
-import Login from './components/Login'
+import Login from './components/Login';
+import Authenticator from './components/Authenticator';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { getQueryParams } from './utils';
 
 
@@ -18,13 +19,42 @@ class App extends Component {
     return !!this.state.token;
   }
 
+  setToken = (token) => {
+    this.setState({
+      token,
+    });
+  }
+
+  logout = () => {
+    this.setState({
+      token: '',
+    });
+    // TODO
+    // do API call to clear the permissions
+  }
+
   render() {
     return (
       <div className="App">
-      {this.isLoggedIn() 
-        ? <Main token={this.state.token } />
-        : <Login />
-      }
+      <header>
+        {this.isLoggedIn() ? <h1>Welcome</h1> : <Login />  }
+      </header>
+      <Router>
+        <div>
+        <Route exact path="/" render={() => {
+          return <h2>Please Log in Above</h2>
+        }} />
+
+        <Route path="/auth" render={() => {
+          console.log('in auth path');
+          return (
+            <Authenticator setToken={this.setToken} />
+          );
+        }} />
+
+        <Route path="/dashboard" render={() => <Main token={this.state.token} />} />
+        </div>
+      </Router>
       </div>
     );
   }
