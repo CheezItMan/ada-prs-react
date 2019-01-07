@@ -21,5 +21,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "react-social-login": "^3.4.3"
+  }
 }
