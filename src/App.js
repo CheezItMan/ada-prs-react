@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Button from 'react-toolbox/lib/button/Button';
+import Main from './components/Main';
+import Login from './components/Login'
+import { getQueryParams } from './utils';
+
+
 import './App.css';
 
 class App extends Component {
+  constructor() {
+    super();
+    const params = getQueryParams();
+    this.state = { token: params.token };
+  }
+
+  isLoggedIn() {
+    return !!this.state.token;
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      {this.isLoggedIn() 
+        ? <Main token={this.state.token } />
+        : <Login />
+      }
       </div>
     );
   }
