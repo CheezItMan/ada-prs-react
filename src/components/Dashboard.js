@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header';
 import ApiWrapper from '../lib/ApiWrapper';
 import { REACT_APP_API_URL } from '../utils';
+import {Link} from 'react-router-dom';
 
 class Dashboard extends Component {
 
@@ -65,24 +66,18 @@ class Dashboard extends Component {
       })
       .catch((error) => {
         console.log(error.status);
-        if (error.status === 401 ) // unauthorized
+        if (error.response.status === 401 ) // unauthorized
           this.props.logoutCallback();
       });
   }
-
-  changeURL = (url, event) => {
-    event.preventDefault();
-    console.log(url);
-  }
-
 
   renderClasses = () => {
     return this.state.classes.map((classroom) => {
       return (
         <h3 key={`${classroom.cohort_number}:${classroom.name}`}>
-          <a href={`${REACT_APP_API_URL}/classes/${classroom.id}`} onClick={(event) => {this.changeURL(`/classes/${classroom.id}`, event)} }>
+          <Link to={`/classes/${classroom.id}` }>
             {classroom.cohort_number} : {classroom.name} 
-          </a>
+          </Link>
         </h3>
       );
     });
