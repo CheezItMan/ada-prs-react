@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dashboard from './components/Dashboard';
 import LoginScreen from './components/LoginScreen';
 import Authenticator from './components/Authenticator';
+import Classroom from './components/Classroom';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 
@@ -40,8 +41,21 @@ class App extends Component {
     // do API call to clear the permissions
   }
 
-  render() {
+  renderComponentIfAuthenticated = (Component, props) => {
+    if (this.isLoggedIn()) {
+      return ( <Component {...props} />);
+    }
+    else {
+      return (<Redirect to="/" />)
+    }
+  }
 
+  render() {
+    const standardProps = {
+      token: this.state.token,
+      uid: this.state.uid, 
+      logoutCallback: this.logout,
+    }
     return (
       <div className="App">
       <Router>
@@ -60,7 +74,14 @@ class App extends Component {
           );
         }} />
 
-        <Route path="/dashboard" render={() => <Dashboard  token={this.state.token} uid={this.state.uid} logoutCallback={this.logout} />} />
+        <Route path="/dashboard" render={(props) => { 
+          return this.renderComponentIfAuthenticated(Dashboard, {...props, ...standardProps});
+          }} 
+        />
+        <Route path="/classes/:id" render={(props) => {
+          return this.renderComponentIfAuthenticated(Classroom, {...props, ...standardProps});
+        }}
+        />
         </div>
       </Router>
       </div>
