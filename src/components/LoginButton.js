@@ -15,7 +15,6 @@ const LoginButton = () => {
       href={`${authorizeUrl}?client_id=${clientId}&scope=${scope}`}
     >
       <GithubIcon />
-      {' '}
       Login with GitHub
     </Button>
   );

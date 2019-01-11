@@ -4,11 +4,31 @@ import { getQueryParams } from '../utils';
 
 const Authenticator = (props) => {
   const params = getQueryParams();
-  const { token } = params;
-  console.log('In Authenticator');
+  let { token } = params;
+  let { uid }   = params;
 
   if (token) {
-    props.setToken(token);
+    localStorage.setItem('jwt-token', params.token);
+    localStorage.setItem('uid', uid);
+  }
+  else {
+    token = localStorage.getItem('jwt-token');
+    uid = localStorage.getItem('uid')
+
+    if(token && token !== "undefined") {  
+      this.state = {
+        token,
+        uid,
+      };
+    }
+  }
+
+  props.updateUserCallback( { 
+    token: params.token,
+    uid, 
+  });
+  
+  if (token && uid) {
     return (
       <Redirect to="/dashboard"/>
     );
