@@ -50,6 +50,12 @@ class App extends Component {
     }
   }
 
+  setToken = (token) => {
+    this.setState({
+      token,
+    });
+  }
+
   render() {
     const standardProps = {
       token: this.state.token,
@@ -78,8 +84,12 @@ class App extends Component {
           return this.renderComponentIfAuthenticated(Dashboard, {...props, ...standardProps});
           }} 
         />
-        <Route path="/classes/:id" render={(props) => {
+        <Route exact path="/classes/:id" render={(props) => {
           return this.renderComponentIfAuthenticated(Classroom, {...props, ...standardProps});
+        }}
+        />
+        <Route exact path="/classes/:class_id/repos/:id" render={(props) => {
+                    return this.renderComponentIfAuthenticated(Classroom, {...props, ...standardProps});
         }}
         />
         </div>
