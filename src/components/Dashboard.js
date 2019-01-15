@@ -18,17 +18,11 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log(REACT_APP_API_URL)
     const USER_DETAILS_URL = `${REACT_APP_API_URL}/users/${this.props.uid}`;
     const CLASSES_LIST_URL = `${REACT_APP_API_URL}/classes`;
-    console.log(USER_DETAILS_URL);
-
-    console.log(this.props);
-
 
     this.apiWrapper.get(USER_DETAILS_URL)
       .then((response) => {
-        console.log(response);
 
         if (response.data && response.data.user && response.data.avatar_url && response.data.name && response.data.id) {
           const avatarUrl = response.data.avatar_url;
@@ -49,6 +43,7 @@ class Dashboard extends Component {
         }
       })
       .catch((error) => {
+        console.log(error);
         console.log(error.response.status);
         if (error.response.status === 401 ) // unauthorized
           this.props.logoutCallback();
@@ -56,8 +51,6 @@ class Dashboard extends Component {
 
     this.apiWrapper.get(CLASSES_LIST_URL)
       .then((response) => {
-        console.log('Class List');
-        console.log(response);
         if (response.data && response.data.classes) {
           this.setState({
             classes: response.data.classes,
