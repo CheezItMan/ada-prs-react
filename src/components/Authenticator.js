@@ -8,6 +8,11 @@ const Authenticator = (props) => {
   let { uid }   = params;
 
   if (token) {
+    props.updateUserCallback( { 
+      token: params.token,
+      uid, 
+    });
+
     localStorage.setItem('jwt-token', params.token);
     localStorage.setItem('uid', uid);
   }
@@ -23,12 +28,8 @@ const Authenticator = (props) => {
     }
   }
 
-  props.updateUserCallback( { 
-    token: params.token,
-    uid, 
-  });
-  
-  if (token && uid) {
+  if (token) {
+    props.setToken(token);
     return (
       <Redirect to="/dashboard"/>
     );
