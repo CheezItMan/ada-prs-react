@@ -39,10 +39,11 @@ class Classroom extends Component {
   }
 
   renderClassroomRepos = () => {
+    const { id } = this.props.match.params;
     return this.state.repos.map((repo) => {
       return (
-      <Link key={repo.id} to={`/repos/${repo.id}`}>
-        {repo.repo_url}
+      <Link key={repo.id} to={`/classrooms/${id}/repos/${repo.id}`}>
+        {repo.repo_url.split('/')[1]}
       </Link>
       );
     });
