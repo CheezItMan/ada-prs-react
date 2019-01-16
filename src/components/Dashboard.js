@@ -12,14 +12,14 @@ class Dashboard extends Component {
     this.apiWrapper = new ApiWrapper(props.token);
 
     this.state = {
-      classes: [],
+      repos: [],
       loading: true,
     };
   }
 
   componentDidMount() {
     const USER_DETAILS_URL = `${REACT_APP_API_URL}/users/${this.props.uid}`;
-    const CLASSES_LIST_URL = `${REACT_APP_API_URL}/classes`;
+    const PR_LIST_URL = `${REACT_APP_API_URL}/pull_requests`;
 
     this.apiWrapper.get(USER_DETAILS_URL)
       .then((response) => {
@@ -49,15 +49,17 @@ class Dashboard extends Component {
           this.props.logoutCallback();
       });
 
-    this.apiWrapper.get(CLASSES_LIST_URL)
+    this.apiWrapper.get(PR_LIST_URL)
       .then((response) => {
-        if (response.data && response.data.classes) {
+        console.log(response.data);
+        if (response.data && response.data.repos) {
           this.setState({
-            classes: response.data.classes,
+            repos: response.data.repos,
           });
         }
       })
       .catch((error) => {
+        console.log(error);
         console.log(error.status);
         if (error.response.status === 401 ) // unauthorized
           this.props.logoutCallback();
@@ -65,13 +67,22 @@ class Dashboard extends Component {
   }
 
   renderClasses = () => {
-    return this.state.classes.map((classroom) => {
+    return this.state.repos.map((repo) => {
       return (
-        <h3 key={`${classroom.cohort_number}:${classroom.name}`}>
-          <Link to={`/classes/${classroom.id}` }>
-            {classroom.cohort_number} : {classroom.name} 
-          </Link>
-        </h3>
+        <tr key={repo.repo_url}>
+          <td>{repo.repo_url}</td>
+          <td>
+            {repo.cohorts.map((cohort) => <p key={`${repo.id}-${cohort.id}`}><Link to={`/repos/${repo.id}/cohort/${cohort.id}`}>{cohort.cohort_name}</Link></p>)}
+          </td>
+          <td>
+            <a href={`https://github.com/${repo.repo_url}`} rel="noopener noreferrer" target="_blank">
+              Github
+            </a>
+          </td>
+          <td>
+            {repo.created_at}
+          </td>
+        </tr>
       );
     });
   }
@@ -81,7 +92,17 @@ class Dashboard extends Component {
       <div>
         <Header user={this.state.user} />
         <main>
-          {this.renderClasses()}
+          <table>
+            <tbody>
+            <tr>
+              <th>Repo Name</th>
+              <th>Student Submissions</th>
+              <th>View on Github</th>
+              <th>Created</th>
+            </tr>
+            {this.renderClasses()}
+            </tbody>
+          </table>
         </main>
       </div>);
   }
