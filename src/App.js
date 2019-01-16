@@ -3,6 +3,7 @@ import Dashboard from './components/Dashboard';
 import LoginScreen from './components/LoginScreen';
 import Authenticator from './components/Authenticator';
 import Classroom from './components/Classroom';
+import Repo from './components/Repo';
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 
@@ -71,7 +72,6 @@ class App extends Component {
         }} />
 
         <Route path="/auth" render={() => {
-          console.log('in auth path');
           return (
             <Authenticator 
               updateUserCallback={this.updateUserState} 
@@ -88,8 +88,8 @@ class App extends Component {
           return this.renderComponentIfAuthenticated(Classroom, {...props, ...standardProps});
         }}
         />
-        <Route exact path="/classes/:class_id/repos/:id" render={(props) => {
-                    return this.renderComponentIfAuthenticated(Classroom, {...props, ...standardProps});
+        <Route exact path="/classrooms/:class_id/repos/:id" render={(props) => {
+                    return this.renderComponentIfAuthenticated(Repo, {...props, ...standardProps});
         }}
         />
         </div>
